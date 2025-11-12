@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://d0olxhfw7d58t"]
+[gd_scene load_steps=7 format=3 uid="uid://d0olxhfw7d58t"]
 
 [ext_resource type="PackedScene" uid="uid://1ntb16ffldwh" path="res://Scenes/Player/Player.tscn" id="1_if7jy"]
-[ext_resource type="Script" uid="uid://bagtgg4slk8yw" path="res://Scenes/Levels/Enemy.gd" id="1_mx3p3"]
 [ext_resource type="PackedScene" uid="uid://dkunkupvkxjw3" path="res://Scenes/Levels/enemy.tscn" id="3_f3gh5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f1n8c"]
@@ -20,8 +19,7 @@ glow_enabled = true
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_mx3p3"]
 
-[node name="Level" type="Node3D"]
-script = ExtResource("1_mx3p3")
+[node name="Level2" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_yjxcc")
@@ -291,7 +289,7 @@ operation = 2
 size = Vector3(0.990734, 1.21377, 0.197266)
 
 [node name="Enemy" parent="." instance=ExtResource("3_f3gh5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.04927, 0.351708, 7.52996)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.04927, 0.801866, 7.52996)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_mx3p3")
