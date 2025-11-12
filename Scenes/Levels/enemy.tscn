@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkunkupvkxjw3"]
+
+[ext_resource type="Script" uid="uid://bagtgg4slk8yw" path="res://Scenes/Levels/Enemy.gd" id="1_apr0y"]
+[ext_resource type="PackedScene" uid="uid://78jjo7vmf65a" path="res://base_enemy.blend" id="2_a2y30"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yjxcc"]
+height = 2.75
+
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1_apr0y")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0533221, 1.38684, 0.0329334)
+shape = SubResource("CapsuleShape3D_yjxcc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="base_enemy" parent="." instance=ExtResource("2_a2y30")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0611601, 0.375, -0.061186)

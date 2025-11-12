@@ -30,7 +30,7 @@ var head_bob_time = 0.0
 # Node references
 @onready var camera = $Head/Camera3D
 @onready var collision_shape = $CollisionShape3D
-@onready var raycast = $Fp_Cam/InteractionRay
+@onready var raycast: RayCast3D = null
 
 # Original heights for transitions
 var original_camera_y = 0.0
