@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bb4tjotokbwy5"]
+[gd_scene load_steps=8 format=3 uid="uid://bb4tjotokbwy5"]
 
 [ext_resource type="PackedScene" uid="uid://1ntb16ffldwh" path="res://Scenes/Player/Player.tscn" id="1_f1n8c"]
+[ext_resource type="PackedScene" uid="uid://dkunkupvkxjw3" path="res://Scenes/Levels/enemy.tscn" id="2_7x7pb"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f1n8c"]
 sky_top_color = Color(0.131257, 0.0531657, 0.0160099, 1)
@@ -39,3 +40,6 @@ mesh = SubResource("BoxMesh_s41d2")
 
 [node name="Player" parent="." instance=ExtResource("1_f1n8c")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2245, 1.50827, 0.139643)
+
+[node name="Enemy" parent="." instance=ExtResource("2_7x7pb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.09673, 0.518693, 4.10104)
