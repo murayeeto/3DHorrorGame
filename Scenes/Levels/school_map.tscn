@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://d0olxhfw7d58t"]
+[gd_scene load_steps=9 format=3 uid="uid://d0olxhfw7d58t"]
 
 [ext_resource type="PackedScene" uid="uid://1ntb16ffldwh" path="res://Scenes/Player/Player.tscn" id="1_if7jy"]
 [ext_resource type="PackedScene" uid="uid://dkunkupvkxjw3" path="res://Scenes/Levels/enemy.tscn" id="3_f3gh5"]
+[ext_resource type="PackedScene" uid="uid://q4wkw3db0enw" path="res://Scenes/Resources/Lighting.tscn" id="3_mx3p3"]
+[ext_resource type="PackedScene" uid="uid://lv18cexhmqt2" path="res://Scenes/Menus&Screens/UI.tscn" id="4_f3gh5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f1n8c"]
 sky_top_color = Color(0.131257, 0.0531657, 0.0160099, 1)
@@ -64,6 +66,12 @@ size = Vector3(1.03601, 0.001, 1.04602)
 transform = Transform3D(1, 0, 0, 0, 1.14488, 0, 0, 0, 1, -2.41007, -3.17589, 20.1866)
 operation = 2
 size = Vector3(1.57001, 2.29808, 1)
+
+[node name="Lighting" parent="Spawn" instance=ExtResource("3_mx3p3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.09585, 7.74437, 15.1475)
+
+[node name="Lighting" parent="Spawn/Lighting" instance=ExtResource("3_mx3p3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92182, -0.193111, -11.6437)
 
 [node name="Hallway" type="CSGCombiner3D" parent="."]
 use_collision = true
@@ -141,6 +149,18 @@ size = Vector3(11.2694, 1.35052, 2.72858)
 transform = Transform3D(0.894343, 0, 0, 0, 7.55656, 0, 0, 0, 21.1647, -1.14769, 5.11205, 47.0486)
 operation = 2
 size = Vector3(45.0876, 1.40026, 0.475517)
+
+[node name="Lighting" parent="Hallway" instance=ExtResource("3_mx3p3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.12362, 4.36037, 29.3467)
+
+[node name="Lighting2" parent="Hallway" instance=ExtResource("3_mx3p3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.70363, 4.36797, 68.7755)
+
+[node name="Lighting3" parent="Hallway" instance=ExtResource("3_mx3p3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.4891, 4.32395, 46.6996)
+
+[node name="Lighting4" parent="Hallway" instance=ExtResource("3_mx3p3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.736, 4.48874, 47.4647)
 
 [node name="Room1" type="CSGCombiner3D" parent="."]
 transform = Transform3D(-2.98023e-08, 0, 1, 0, 1, 0, -1, 0, -2.98023e-08, -71.6643, 4.80731, 43.7992)
@@ -289,7 +309,11 @@ operation = 2
 size = Vector3(0.990734, 1.21377, 0.197266)
 
 [node name="Enemy" parent="." instance=ExtResource("3_f3gh5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.04927, 0.801866, 7.52996)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -2.04675, 0.824534, 7.52599)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_mx3p3")
+
+[node name="Ui" parent="." instance=ExtResource("4_f3gh5")]
+scale = Vector2(0.25, 0.25)
+transform = Transform2D(0.25, 0, 0, 0.25, 0, 0)

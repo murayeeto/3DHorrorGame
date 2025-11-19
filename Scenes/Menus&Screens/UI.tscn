@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://lv18cexhmqt2"]
+
+[ext_resource type="Script" uid="uid://y5jr5swcccja" path="res://Scenes/Menus&Screens/UI_Controller.gd" id="1_kt4tf"]
+[ext_resource type="Texture2D" uid="uid://cfkem4t1788w3" path="res://Scenes/Resources/heart pixel art 254x254.png" id="2_0qmb7"]
+
+[node name="Ui" type="CanvasLayer" node_paths=PackedStringArray("heart1", "heart2", "heart3")]
+script = ExtResource("1_kt4tf")
+heart1 = NodePath("CanvasLayer/HBoxContainer/TextureRect")
+heart2 = NodePath("CanvasLayer/HBoxContainer/TextureRect2")
+heart3 = NodePath("CanvasLayer/HBoxContainer/TextureRect3")
+
+[node name="CanvasLayer" type="MarginContainer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_0qmb7")
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_0qmb7")
+
+[node name="TextureRect3" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_0qmb7")
