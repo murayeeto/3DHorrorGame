@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="3DHorrorGame"
-run/main_scene="uid://bb4tjotokbwy5"
-config/features=PackedStringArray("4.5", "Forward Plus")
+run/main_scene="uid://d0olxhfw7d58t"
+config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
 [filesystem]

@@ -1,27 +1,73 @@
-[gd_scene load_steps=3 format=3 uid="uid://lv18cexhmqt2"]
+[gd_scene load_steps=4 format=3 uid="uid://lv18cexhmqt2"]
 
 [ext_resource type="Script" uid="uid://y5jr5swcccja" path="res://Scenes/Menus&Screens/UI_Controller.gd" id="1_kt4tf"]
 [ext_resource type="Texture2D" uid="uid://cfkem4t1788w3" path="res://Scenes/Resources/heart pixel art 254x254.png" id="2_0qmb7"]
+[ext_resource type="Texture2D" uid="uid://cku3ae7l0ywbd" path="res://Scenes/Resources/UI_TravelBook_BookPageLeft01a.png" id="3_0qmb7"]
 
-[node name="Ui" type="CanvasLayer" node_paths=PackedStringArray("heart1", "heart2", "heart3")]
+[node name="Ui" type="CanvasLayer" node_paths=PackedStringArray("heart1", "heart2", "heart3", "item_counter_label")]
 script = ExtResource("1_kt4tf")
 heart1 = NodePath("CanvasLayer/HBoxContainer/TextureRect")
 heart2 = NodePath("CanvasLayer/HBoxContainer/TextureRect2")
 heart3 = NodePath("CanvasLayer/HBoxContainer/TextureRect3")
+item_counter_label = NodePath("ItemCounter/HBoxContainer/Label")
 
 [node name="CanvasLayer" type="MarginContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
 layout_mode = 2
+theme_override_constants/separation = 5
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("2_0qmb7")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="TextureRect2" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("2_0qmb7")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="TextureRect3" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("2_0qmb7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ItemCounter" type="MarginContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ItemCounter"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TextureRect" type="TextureRect" parent="ItemCounter/HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("3_0qmb7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="ItemCounter/HBoxContainer"]
+layout_mode = 2
+text = "0/8"
