@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://78jjo7vmf65a"
-path="res://.godot/imported/base_enemy.blend-f457100ff089869e77fe357c69fad003.scn"
+uid="uid://bnhjrpts5r7ms"
+path="res://.godot/imported/Parchament_open.blend-67957026e5e184f9cf62abe9a2b7ade3.scn"
 
 [deps]
 
-source_file="res://base_enemy.blend"
-dest_files=["res://.godot/imported/base_enemy.blend-f457100ff089869e77fe357c69fad003.scn"]
+source_file="res://Models/Parchament_open.blend"
+dest_files=["res://.godot/imported/Parchament_open.blend-67957026e5e184f9cf62abe9a2b7ade3.scn"]
 
 [params]
 
@@ -21,7 +21,7 @@ nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false
 nodes/use_name_suffixes=true
 nodes/use_node_type_suffixes=true
-meshes/ensure_tangents=true
+meshes/ensure_tangents=false
 meshes/generate_lods=true
 meshes/create_shadow_meshes=true
 meshes/light_baking=1

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dkunkupvkxjw3"]
 
-[ext_resource type="Script" uid="uid://bagtgg4slk8yw" path="res://Scenes/Levels/Enemy.gd" id="1_apr0y"]
-[ext_resource type="PackedScene" uid="uid://78jjo7vmf65a" path="res://base_enemy.blend" id="2_a2y30"]
+[ext_resource type="Script" uid="uid://bagtgg4slk8yw" path="res://Scripts/Enemy.gd" id="1_apr0y"]
+[ext_resource type="PackedScene" uid="uid://78jjo7vmf65a" path="res://Models/base_enemy.blend" id="2_a2y30"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yjxcc"]
 height = 2.75
