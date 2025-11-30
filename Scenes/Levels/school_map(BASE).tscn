@@ -1,9 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://cuvwgjg2y6mfg"]
+[gd_scene load_steps=9 format=3 uid="uid://cuvwgjg2y6mfg"]
 
 [ext_resource type="PackedScene" uid="uid://1ntb16ffldwh" path="res://Scenes/Player/Player.tscn" id="1_61imk"]
-[ext_resource type="PackedScene" uid="uid://q4wkw3db0enw" path="res://Scenes/Resources/Lighting.tscn" id="2_t8p38"]
 [ext_resource type="PackedScene" uid="uid://dkunkupvkxjw3" path="res://Scenes/Levels/enemy.tscn" id="3_ou0hf"]
-[ext_resource type="PackedScene" uid="uid://lv18cexhmqt2" path="res://Scenes/Menus&Screens/UI.tscn" id="4_ypp45"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f1n8c"]
 sky_top_color = Color(0.131257, 0.0531657, 0.0160099, 1)
@@ -73,11 +71,31 @@ transform = Transform3D(1, 0, 0, 0, 1.14488, 0, 0, 0, 1, -2.41007, -3.17589, 20.
 operation = 2
 size = Vector3(1.57001, 2.29808, 1)
 
-[node name="Lighting" parent="Spawn" instance=ExtResource("2_t8p38")]
+[node name="Lighting" parent="Spawn"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.09585, 7.74437, 15.1475)
+script = null
 
-[node name="Lighting2" parent="Spawn" instance=ExtResource("2_t8p38")]
+[node name="Lighting2" parent="Spawn"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.01767, 7.5512586, 3.5038004)
+script = null
 
 [node name="Hallway" type="CSGCombiner3D" parent="."]
 use_collision = true
@@ -161,17 +179,57 @@ transform = Transform3D(0.894343, 0, 0, 0, 7.55656, 0, 0, 0, 21.1647, -1.6248181
 operation = 2
 size = Vector3(11.3071575, 0.04353281, 3.5974197)
 
-[node name="Lighting" parent="Hallway" instance=ExtResource("2_t8p38")]
+[node name="Lighting" parent="Hallway"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.12362, 4.36037, 29.3467)
+script = null
 
-[node name="Lighting2" parent="Hallway" instance=ExtResource("2_t8p38")]
+[node name="Lighting2" parent="Hallway"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.70363, 4.36797, 68.7755)
+script = null
 
-[node name="Lighting3" parent="Hallway" instance=ExtResource("2_t8p38")]
+[node name="Lighting3" parent="Hallway"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.4891, 4.32395, 46.6996)
+script = null
 
-[node name="Lighting4" parent="Hallway" instance=ExtResource("2_t8p38")]
+[node name="Lighting4" parent="Hallway"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.736, 4.48874, 47.4647)
+script = null
 
 [node name="Room1" type="CSGCombiner3D" parent="."]
 transform = Transform3D(-2.98023e-08, 0, 1, 0, 1, 0, -1, 0, -2.98023e-08, -71.6643, 4.47069, 43.7992)
@@ -919,4 +977,14 @@ transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -2.0427, 0.829292, 7
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_mx3p3")
 
-[node name="Ui" parent="." instance=ExtResource("4_ypp45")]
+[node name="Ui" parent="."]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+script = null
