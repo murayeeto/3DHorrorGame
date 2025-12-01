@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqf4gkthqblr0"
-path.s3tc="res://.godot/imported/Sand_03.png-670de17aba4d60bedf2b3f4df53e2864.s3tc.ctex"
+uid="uid://bn5vbx6d2kq35"
+path.s3tc="res://.godot/imported/props_Image.png-8b23507177b7b8f9ec1ec8794cc26e1d.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "8597d4e7e65352a302b63e07bc01a7da"
+}
 
 [deps]
 
-source_file="res://Assets/Horror Textures by Canvas Coven/Sand/Sand_03.png"
-dest_files=["res://.godot/imported/Sand_03.png-670de17aba4d60bedf2b3f4df53e2864.s3tc.ctex"]
+source_file="res://Assets/Models pack psx/Models/props_Image.png"
+dest_files=["res://.godot/imported/props_Image.png-8b23507177b7b8f9ec1ec8794cc26e1d.s3tc.ctex"]
 
 [params]
 
