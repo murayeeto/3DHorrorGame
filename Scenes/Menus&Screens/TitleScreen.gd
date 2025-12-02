@@ -52,4 +52,4 @@ func trigger_game_over():
 
 func _on_play_button_pressed():
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://Scenes/Levels/school_map.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Levels/school_map(BASE).tscn")

@@ -21,7 +21,7 @@ func _ready():
 func restart_game():
 	print("Restarting game...")
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://Scenes/Levels/school_map.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Levels/school_map(BASE).tscn")
    
 func quit_to_menu():
 	print("Going to menu...")

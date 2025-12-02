@@ -215,7 +215,12 @@ func take_damage(amount: int):
 	# Emit signal for UI update
 	health_changed.emit(health)
 	
-	# Start invulnerability
+	# Check if dead
+	if health <= 0:
+		die()
+		return
+	
+	# Start invulnerability only if still alive
 	is_invulnerable = true
 	invulnerability_timer = INVULNERABILITY_TIME
 	
@@ -223,10 +228,6 @@ func take_damage(amount: int):
 	if camera:
 		# Create a brief camera shake or flash effect
 		camera_damage_effect()
-	
-	# Check if dead
-	if health <= 0:
-		die()
 
 func camera_damage_effect():
 	# Simple camera shake effect
@@ -243,7 +244,5 @@ func camera_damage_effect():
 func die():
 	print("========== PLAYER DIED ==========")
 	print("Game Over!")
-	# TODO: Implement death screen/respawn
-	# For now, just reload the scene
-	await get_tree().create_timer(1.0).timeout
-	get_tree().reload_current_scene()
+	# Load the game over screen immediately
+	get_tree().change_scene_to_file("res://Scenes/Menus&Screens/GameOver.tscn")
