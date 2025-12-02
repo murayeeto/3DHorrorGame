@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://7ehxbhg5kx3s"]
+
+[ext_resource type="Script" uid="uid://dhiil61sc5guv" path="res://Scripts/Collectable.gd" id="1_70sqh"]
+[ext_resource type="AudioStream" uid="uid://5l7j23wq1q2u" path="res://Scenes/SFX/undertakers-bell_2UwFCIe.mp3" id="2_e5uc6"]
+[ext_resource type="PackedScene" uid="uid://bnhjrpts5r7ms" path="res://Models/Parchament_open.blend" id="3_e5uc6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ynjqq"]
+size = Vector3(0.795, 1, 0.215)
+
+[node name="Collectible" type="Area3D"]
+collision_layer = 8
+collision_mask = 8
+script = ExtResource("1_70sqh")
+pickup_sound = ExtResource("2_e5uc6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.77, 0, 0, 0, 0.77, 0, 0, 0, 0.77, 0, 0, 0)
+shape = SubResource("BoxShape3D_ynjqq")
+
+[node name="Parchament_open2" parent="." instance=ExtResource("3_e5uc6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8873162, 0, -0.0014895201)
