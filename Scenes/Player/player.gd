@@ -1,5 +1,8 @@
 extends CharacterBody3D
 
+# Signals
+signal health_changed(new_health: int)
+
 # Movement speeds
 const WALK_SPEED = 5.0
 const SPRINT_SPEED = 8.0
@@ -22,10 +25,17 @@ const BOB_AMPLITUDE_SPRINT = 0.12
 const PICKUP_RANGE = 3.0
 const INTERACTION_RANGE = 3.0
 
+# Health settings
+const MAX_HEALTH = 3
+const INVULNERABILITY_TIME = 2.0
+
 # State variables
 var current_speed = WALK_SPEED
 var is_crouching = false
 var head_bob_time = 0.0
+var health = MAX_HEALTH
+var is_invulnerable = false
+var invulnerability_timer = 0.0
 
 # Node references
 @onready var camera = $Head/Camera3D
@@ -56,6 +66,16 @@ func _physics_process(delta: float) -> void:
 	# Apply gravity
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+	
+	# Update invulnerability timer
+	if is_invulnerable:
+		invulnerability_timer -= delta
+		if invulnerability_timer <= 0:
+			is_invulnerable = false
+			print("Invulnerability ended")
+	
+	# Check for enemy collision damage
+	check_enemy_collision()
 	
 	# Handle crouch toggle
 	handle_crouch(delta)
@@ -168,3 +188,62 @@ func add_to_inventory(item_name: String):
 	print("Added to inventory: ", item_name)
 	# TODO: Implement actual inventory system
 	pass
+
+# Check for collision with enemies
+func check_enemy_collision():
+	if is_invulnerable:
+		return
+	
+	# Check all bodies we're colliding with
+	for i in range(get_slide_collision_count()):
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		
+		# Check if collider is an enemy (has CharacterBody3D parent or is enemy)
+		if collider and (collider.is_in_group("enemy") or collider.name.contains("Enemy")):
+			take_damage(1)
+			break
+
+# Take damage function
+func take_damage(amount: int):
+	if is_invulnerable:
+		return
+	
+	health -= amount
+	print("Player took damage! Health: ", health, "/", MAX_HEALTH)
+	
+	# Emit signal for UI update
+	health_changed.emit(health)
+	
+	# Start invulnerability
+	is_invulnerable = true
+	invulnerability_timer = INVULNERABILITY_TIME
+	
+	# Visual feedback - flash the screen or camera
+	if camera:
+		# Create a brief camera shake or flash effect
+		camera_damage_effect()
+	
+	# Check if dead
+	if health <= 0:
+		die()
+
+func camera_damage_effect():
+	# Simple camera shake effect
+	if camera:
+		var original_pos = camera.position
+		# Quick shake
+		for i in range(3):
+			camera.position = original_pos + Vector3(randf_range(-0.1, 0.1), randf_range(-0.1, 0.1), 0)
+			await get_tree().create_timer(0.05).timeout
+		camera.position = original_pos
+		
+		print("[DAMAGE] Invulnerable for ", INVULNERABILITY_TIME, " seconds")
+
+func die():
+	print("========== PLAYER DIED ==========")
+	print("Game Over!")
+	# TODO: Implement death screen/respawn
+	# For now, just reload the scene
+	await get_tree().create_timer(1.0).timeout
+	get_tree().reload_current_scene()

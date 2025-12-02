@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://q4wkw3db0enw"]
+
+[ext_resource type="ArrayMesh" uid="uid://d3iukaovjkemn" path="res://Models/Candle_chandelier.obj" id="1_otv4a"]
+
+[node name="Lighting" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_otv4a")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0262299)
+light_energy = 16.0
+light_indirect_energy = 0.0
+light_size = 1.0
+light_specular = 16.0
