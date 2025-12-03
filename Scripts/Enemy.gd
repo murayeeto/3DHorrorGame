@@ -29,6 +29,11 @@ enum State {
 @export var random_hunt_chance: float = 0.05  # 5% chance per check
 @export var hunt_check_interval: float = 3.0  # Check every 3 seconds
 
+@export_group("Spawning")
+@export var min_spawn_distance: float = 15.0  # Minimum distance from player
+@export var max_spawn_distance: float = 40.0  # Maximum distance from player
+@export var max_spawn_attempts: int = 50  # Max attempts to find valid spawn
+
 # Footstep settings
 var footstep_timer: float = 0.0
 const FOOTSTEP_INTERVAL: float = 0.6  # Heavy footsteps are slower
@@ -53,6 +58,8 @@ var wander_target: Vector3
 var state_timer: float = 0.0
 var wait_time: float = 3.0
 var hunt_timer: float = 0.0
+var wander_progress_timer: float = 0.0
+var last_wander_distance: float = 0.0
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 # Child nodes
@@ -88,6 +95,12 @@ func _ready():
 	
 	# Find all available floors for wandering
 	find_floor_nodes()
+	
+	# Spawn at random position on map
+	call_deferred("_spawn_at_random_location")
+	
+	# Spawn at random position on map
+	call_deferred("_spawn_at_random_location")
 	
 	# Setup footstep audio player
 	if not footstep_player:
@@ -137,6 +150,8 @@ func _physics_process(delta: float):
 	# Check for random hunt activation
 	if hunt_timer >= hunt_check_interval and current_state != State.CHASE and current_state != State.ATTACK:
 		if randf() < random_hunt_chance and player:
+			var distance = global_position.distance_to(player.global_position)
+			print("Enemy: RANDOM HUNT activated from distance: ", distance, "m")
 			change_state(State.CHASE)
 		hunt_timer = 0.0
 	
@@ -160,6 +175,9 @@ func _physics_process(delta: float):
 			process_chase(delta)
 		State.ATTACK:
 			process_attack(delta)
+	
+	# Check for ledge climbing before moving
+	check_and_climb_ledge()
 	
 	# Apply movement
 	move_and_slide()
@@ -186,6 +204,19 @@ func process_wander(delta: float):
 	if distance_to_target < 2.0:
 		change_state(State.IDLE)
 		return
+	
+	# Check if making progress toward target
+	wander_progress_timer += delta
+	if wander_progress_timer >= 5.0:
+		# Check if we've made progress in the last 5 seconds
+		var progress_made = last_wander_distance - distance_to_target
+		if progress_made < 2.0:  # Less than 2 meters progress in 5 seconds
+			print("Enemy: Not making progress (only ", progress_made, "m in 5s), picking new target")
+			change_state(State.IDLE)
+			return
+		# Reset timer and update distance
+		wander_progress_timer = 0.0
+		last_wander_distance = distance_to_target
 	
 	# Check if stuck (using collision detection)
 	if is_on_wall():
@@ -227,17 +258,25 @@ func process_chase(delta: float):
 	current_chase_speed = min(chase_speed + (chase_time * CHASE_SPEED_RAMP_RATE), MAX_CHASE_SPEED)
 	
 	var direction: Vector3
+	var use_navigation = false
 	
-	# Update navigation target to player position
-	if navigation_agent and navigation_agent.is_target_reachable():
+	# Try to use NavigationAgent for pathfinding
+	if navigation_agent:
 		navigation_agent.target_position = player.global_position
 		navigation_agent.max_speed = current_chase_speed
 		
-		# Use NavigationAgent for pathfinding
-		var next_position = navigation_agent.get_next_path_position()
-		direction = (next_position - global_position).normalized()
-	else:
-		# Fallback to direct movement
+		# Use navigation if we're far from the player OR if path is valid
+		if distance_to_player > 10.0 or navigation_agent.is_target_reachable():
+			# Get next path position
+			var next_position = navigation_agent.get_next_path_position()
+			
+			# Check if next position is valid (not our current position)
+			if next_position.distance_to(global_position) > 0.5:
+				direction = (next_position - global_position).normalized()
+				use_navigation = true
+	
+	# Fallback to direct movement if navigation failed
+	if not use_navigation:
 		direction = (player.global_position - global_position).normalized()
 	
 	# Set velocity using direction and ramped speed
@@ -288,14 +327,17 @@ func change_state(new_state: State):
 			#print("Enemy: IDLE")
 			wait_time = randf_range(wander_wait_time_min, wander_wait_time_max)
 		State.WANDER:
-			#print("Enemy: WANDER")
 			set_random_wander_target()
 			if navigation_agent:
 				navigation_agent.target_position = wander_target
+			wander_progress_timer = 0.0
+			last_wander_distance = global_position.distance_to(wander_target)
+			print("Enemy: WANDERING to position: ", wander_target)
 		State.CHASE:
-			#print("Enemy: CHASE")
 			chase_time = 0.0
 			current_chase_speed = chase_speed
+			if player:
+				print("Enemy: CHASING player at position: ", player.global_position)
 		State.ATTACK:
 			#print("Enemy: ATTACK")
 			pass
@@ -303,15 +345,23 @@ func change_state(new_state: State):
 func set_random_wander_target():
 	# Use floor-based wandering if floors are available
 	if not available_floors.is_empty():
-		# Pick a random floor
-		var random_floor = available_floors[randi() % available_floors.size()]
-		
-		# Get a random position on that floor
-		var floor_position = get_random_position_on_floor(random_floor)
-		
-		if floor_position != Vector3.ZERO:
-			wander_target = floor_position
-			return
+		# Try multiple times to find a floor far enough away
+		for attempt in range(10):
+			# Pick a random floor
+			var random_floor = available_floors[randi() % available_floors.size()]
+			
+			# Get a random position on that floor
+			var floor_position = get_random_position_on_floor(random_floor)
+			
+			if floor_position != Vector3.ZERO:
+				# Check if target is far enough from current position
+				var distance = global_position.distance_to(floor_position)
+				if distance >= 10.0:  # Minimum 10 meters away
+					wander_target = floor_position
+					return
+				elif attempt == 9:  # Last attempt, use it anyway
+					wander_target = floor_position
+					return
 	
 	# Fallback to old radius-based system if no floors found
 	var angle = randf() * TAU
@@ -360,6 +410,38 @@ func find_nodes_by_name(node: Node, search_name: String) -> Array[Node]:
 	for child in node.get_children():
 		result.append_array(find_nodes_by_name(child, search_name))
 	return result
+
+func _spawn_at_random_location():
+	# Wait for player to be found
+	await get_tree().create_timer(0.2).timeout
+	
+	if not player or available_floors.is_empty():
+		print("Enemy: Cannot spawn randomly - no player or floors found")
+		return
+	
+	# Try to find a valid spawn position
+	for attempt in range(max_spawn_attempts):
+		# Pick a random floor
+		var random_floor = available_floors[randi() % available_floors.size()]
+		
+		# Get a random position on that floor
+		var spawn_pos = get_random_position_on_floor(random_floor)
+		
+		if spawn_pos == Vector3.ZERO:
+			continue
+		
+		# Check distance to player
+		var distance_to_player = spawn_pos.distance_to(player.global_position)
+		
+		if distance_to_player >= min_spawn_distance and distance_to_player <= max_spawn_distance:
+			# Valid spawn position!
+			global_position = spawn_pos
+			spawn_position = spawn_pos
+			last_position = spawn_pos
+			print("Enemy spawned at distance: ", distance_to_player, "m from player")
+			return
+	
+	print("Enemy: Failed to find valid spawn position after ", max_spawn_attempts, " attempts")
 
 func get_random_position_on_floor(floor_node: Node) -> Vector3:
 	# Check if it's a CSGBox3D
@@ -454,6 +536,42 @@ func smooth_look_at(target_pos: Vector3, delta: float):
 	
 	# Smoothly interpolate rotation
 	rotation.y = lerp_angle(rotation.y, target_rotation, rotation_speed * delta)
+
+func check_and_climb_ledge():
+	# Always check if we're stuck, regardless of state
+	var horizontal_velocity = Vector2(velocity.x, velocity.z).length()
+	
+	# If barely moving or hitting a wall during movement states
+	if (horizontal_velocity < 1.0 or is_on_wall()) and (current_state == State.WANDER or current_state == State.CHASE):
+		var space_state = get_world_3d().direct_space_state
+		var forward_direction = -global_transform.basis.z
+		
+		# Cast downward from above to find the next floor surface
+		var ahead_distance = 1.0  # Look 1 meter ahead
+		var ahead_pos = global_position + (forward_direction * ahead_distance)
+		
+		# Start from 6 meters above, cast down to find floor
+		var ray_start = ahead_pos + Vector3.UP * 6.0
+		var ray_end = ahead_pos + Vector3.DOWN * 2.0
+		
+		var query = PhysicsRayQueryParameters3D.create(ray_start, ray_end)
+		query.exclude = [self]
+		var result = space_state.intersect_ray(query)
+		
+		if result:
+			var floor_y = result.position.y
+			var current_y = global_position.y
+			var height_diff = floor_y - current_y
+			
+			# If there's a floor ahead that's higher (climbing up) or lower (stepping down)
+			# Allow up to 5m climb and any amount of stepping down
+			if (height_diff > 0.05 and height_diff <= 5.0) or (height_diff < -0.05):
+				# Teleport to the new floor height
+				global_position.y = floor_y + 0.1
+				velocity.y = 0
+				# Also nudge forward slightly to get past the obstruction
+				global_position += forward_direction * 0.3
+				return
 
 func perform_attack():
 	pass

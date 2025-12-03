@@ -147,6 +147,8 @@ func _ready():
 			ambient_audio.stream = ambient_sound
 			ambient_audio.volume_db = -20.0  # Low volume for ambience
 			ambient_audio.autoplay = true
+			if ambient_audio.stream:
+				ambient_audio.stream.loop = true
 			ambient_audio.play()
 
 func _physics_process(delta: float) -> void:
