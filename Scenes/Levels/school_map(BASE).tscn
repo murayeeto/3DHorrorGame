@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=4 uid="uid://cuvwgjg2y6mfg"]
+[gd_scene load_steps=73 format=4 uid="uid://cuvwgjg2y6mfg"]
 
 [ext_resource type="PackedScene" uid="uid://1ntb16ffldwh" path="res://Scenes/Player/Player.tscn" id="1_61imk"]
 [ext_resource type="Texture2D" uid="uid://biorq6gj2wltl" path="res://Assets/Horror Textures by Canvas Coven/Tiled metal texture/Tiled_metal_texture_16.png" id="2_61imk"]
@@ -24,6 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://dqf4gkthqblr0" path="res://Assets/Horror Textures by Canvas Coven/Sand/Sand_03.png" id="16_cmvlt"]
 [ext_resource type="PackedScene" uid="uid://7ehxbhg5kx3s" path="res://Scenes/Levels/bookCollect.tscn" id="22_ffbuv"]
 [ext_resource type="PackedScene" uid="uid://lv18cexhmqt2" path="res://Scenes/Menus&Screens/UI.tscn" id="23_2ppqv"]
+[ext_resource type="Script" uid="uid://nomgj6u8dxt3" path="res://Scenes/Levels/PauseMenu.gd" id="25_1wcdn"]
 
 [sub_resource type="Environment" id="Environment_ou0hf"]
 background_mode = 1
@@ -417,7 +418,7 @@ spot_attenuation = 1.93
 use_collision = true
 
 [node name="H1Floor" type="CSGBox3D" parent="Hallway"]
-transform = Transform3D(10.4178, 0, 0, 0, 2.03393, 0, 0, 0, 70.9023, -1.62567, -0.1261335, 50.903)
+transform = Transform3D(10.4178, 0, 0, 0, 2.03393, 0, 0, 0, 70.9023, -1.62567, 0.144741, 50.903)
 size = Vector3(1.03601, 0.175427, 1.0466)
 
 [node name="H1Wall1" type="CSGBox3D" parent="Hallway"]
@@ -436,7 +437,7 @@ size = Vector3(1.03601, 0.175427, 1.04602)
 material = SubResource("StandardMaterial3D_mtssq")
 
 [node name="H2Floor" type="CSGBox3D" parent="Hallway"]
-transform = Transform3D(-4.55378e-07, 0, -97.8651, 0, 2.03393, 0, 10.4178, 0, -4.27782e-06, 4.69572, -0.20576999, 47.087)
+transform = Transform3D(-4.55378e-07, 0, -97.8651, 0, 2.03393, 0, 10.4178, 0, -4.27782e-06, 4.69572, -0.100646, 47.087)
 size = Vector3(1.03601, 0.175427, 1.14517)
 material = SubResource("StandardMaterial3D_1j7or")
 
@@ -456,7 +457,7 @@ size = Vector3(1.03601, 0.175427, 1.15785)
 material = SubResource("StandardMaterial3D_3lo0n")
 
 [node name="H3Floor" type="CSGBox3D" parent="Hallway"]
-transform = Transform3D(-10.4178, 0, 7.84762e-06, 0, 2.03393, 0, -9.10756e-07, 0, -89.7663, 55.8654, -0.19417283, 94.6457)
+transform = Transform3D(-10.4178, 0, 7.84762e-06, 0, 2.03393, 0, -9.10756e-07, 0, -89.7663, 55.8654, -0.100646, 94.6457)
 size = Vector3(1.03601, 0.175427, 1.182)
 material = SubResource("StandardMaterial3D_wtcxh")
 
@@ -1461,7 +1462,7 @@ spot_angle = 50.58
 [node name="StairsVisual" type="CSGCombiner3D" parent="."]
 
 [node name="Stair1" type="CSGBox3D" parent="StairsVisual"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65838, -0.20037961, 88.4566)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65838, -0.181064, 88.4566)
 size = Vector3(10.1793, 0.364578, 1)
 material = SubResource("StandardMaterial3D_v80m8")
 
@@ -2445,5 +2446,12 @@ book_scene = ExtResource("22_ffbuv")
 spawn_height = 1.0
 
 [node name="Ui" parent="." instance=ExtResource("23_2ppqv")]
+
+[node name="PauseMenu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("25_1wcdn")
 
 [editable path="props"]
