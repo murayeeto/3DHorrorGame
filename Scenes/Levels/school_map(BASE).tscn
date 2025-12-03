@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dkunkupvkxjw3" path="res://Scenes/Levels/enemy.tscn" id="3_ou0hf"]
 [ext_resource type="Texture2D" uid="uid://d710yp6s1d5e" path="res://Assets/Horror Textures by Canvas Coven/Stone tiled bricks/Stone_tiled_bricks_05.png" id="3_t8p38"]
 [ext_resource type="Texture2D" uid="uid://cpw8g6ru12vhx" path="res://Assets/Models pack psx/Texture/P3.jpg" id="4_ou0hf"]
-[ext_resource type="Script" path="res://Scripts/BookSpawner.gd" id="4_spawner"]
+[ext_resource type="Script" uid="uid://ckp7lkk5a05b0" path="res://Scripts/BookSpawner.gd" id="4_spawner"]
 [ext_resource type="Texture2D" uid="uid://b4e3q6ump7q0f" path="res://Assets/Horror Textures by Canvas Coven/Unique pattern materials/Unique_pattern_material_22.png" id="5_24y5l"]
 [ext_resource type="PackedScene" uid="uid://dd5re7ctke8i1" path="res://Assets/Models pack psx/Models/props.glb" id="5_t8p38"]
 [ext_resource type="Texture2D" uid="uid://cnupmblf5gmq0" path="res://Assets/Horror Textures by Canvas Coven/Stone tiles/Stone_tiles_11.png" id="6_512ek"]
@@ -2442,13 +2442,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.183, 1.52799, 3.12483)
 [node name="BookSpawner" type="Node" parent="."]
 script = ExtResource("4_spawner")
 book_scene = ExtResource("22_ffbuv")
-number_of_books = 8
 spawn_height = 1.0
-min_x = -25.0
-max_x = 25.0
-min_z = -25.0
-max_z = 25.0
-floor_y = 1.0
 
 [node name="Ui" parent="." instance=ExtResource("23_2ppqv")]
 

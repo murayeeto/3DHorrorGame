@@ -59,6 +59,7 @@ const STATIC_MIN_DISTANCE: float = 3.0   # Distance at which static is max (redu
 @onready var footstep_player: AudioStreamPlayer3D = null
 @onready var static_overlay: Control = null
 @onready var static_audio: AudioStreamPlayer = null
+@onready var ambient_audio: AudioStreamPlayer = null
 
 # Original heights for transitions
 var original_camera_y = 0.0
@@ -117,14 +118,10 @@ func _ready():
 			# Position at center of screen and scale to fill
 			animated_sprite.position = Vector2(960, 540)  # 1920x1080 center
 			animated_sprite.scale = Vector2(20, 20)  # Large scale to cover screen
-			print("Static animation loaded and playing")
-		else:
-			print("ERROR: Failed to load static frames!")
 		
 		static_overlay = control_container
 		# Start invisible
 		static_overlay.modulate.a = 0.0
-		print("Static overlay created successfully")
 	
 	# Setup static audio
 	if not static_audio:
@@ -137,9 +134,20 @@ func _ready():
 		if static_sound:
 			static_audio.stream = static_sound
 			static_audio.volume_db = -80.0  # Start silent
-			print("Static audio loaded successfully")
-		else:
-			print("ERROR: Failed to load static audio!")
+	
+	# Setup ambient horror audio
+	if not ambient_audio:
+		ambient_audio = AudioStreamPlayer.new()
+		add_child(ambient_audio)
+		ambient_audio.name = "AmbientAudio"
+		ambient_audio.bus = "Master"
+		# Load ambient sound
+		var ambient_sound = load("res://Scenes/SFX/horror-ambience-01-66708.mp3")
+		if ambient_sound:
+			ambient_audio.stream = ambient_sound
+			ambient_audio.volume_db = -20.0  # Low volume for ambience
+			ambient_audio.autoplay = true
+			ambient_audio.play()
 
 func _physics_process(delta: float) -> void:
 	# Apply gravity
@@ -428,8 +436,6 @@ func update_static_effect():
 		if distance < closest_distance:
 			closest_distance = distance
 	
-	print("Closest enemy distance: ", closest_distance, " Static intensity: ", static_intensity)
-	
 	# Don't show static during invulnerability
 	if is_invulnerable:
 		static_intensity = 0.0
@@ -456,15 +462,12 @@ func update_static_visuals():
 	if static_overlay and is_instance_valid(static_overlay):
 		static_overlay.modulate.a = static_intensity * 0.25  # Max 25% opacity (reduced from 60%)
 		static_overlay.visible = static_intensity > 0.05  # Only show when noticeable
-		if static_intensity > 0.1:
-			print("Static visible - intensity: ", static_intensity, " alpha: ", static_overlay.modulate.a)
 	
 	# Update audio volume
 	if static_audio and is_instance_valid(static_audio):
 		if static_intensity > 0.01:
 			if not static_audio.playing:
 				static_audio.play()
-				print("Started playing static audio at volume: ", lerp(-80.0, -10.0, static_intensity))
 			# Volume range from -80 dB (silent) to -10 dB (loud)
 			var target_volume = lerp(-80.0, -10.0, static_intensity)
 			static_audio.volume_db = target_volume
