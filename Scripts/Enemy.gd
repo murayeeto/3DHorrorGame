@@ -60,9 +60,10 @@ func _setup():
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		player = players[0]
-		print("Enemy found player: ", player.name)
+		#print("Enemy found player: ", player.name)
 	else:
-		print("WARNING: No player found in 'player' group!")
+		pass
+		#print("WARNING: No player found in 'player' group!")
 	
 	# Start in idle state
 	change_state(State.IDLE)
@@ -108,18 +109,17 @@ func process_wander(delta: float):
 	# Simple direct movement - no navigation agent needed for wandering
 	var distance_to_target = global_position.distance_to(wander_target)
 	
-	print("Wander: Distance to target: ", distance_to_target)
+	#print("Wander: Distance to target: ", distance_to_target)
 	
 	# Check if reached destination
 	if distance_to_target < 1.0:
-		print("Wander: Reached destination")
+		#print("Wander: Reached destination")
 		change_state(State.IDLE)
 		return
 	
 	# Move directly towards wander target
 	var direction = (wander_target - global_position).normalized()
 	
-	print("Wander: Target: ", wander_target, " Current: ", global_position, " Direction: ", direction)
 	
 	# Set velocity directly
 	velocity.x = direction.x * wander_speed
@@ -148,7 +148,6 @@ func process_chase(delta: float):
 	# Move DIRECTLY towards player - ignore navigation for now
 	var direction = (player.global_position - global_position).normalized()
 	
-	print("Chase: Distance: ", distance_to_player, " Direction: ", direction, " Velocity: ", Vector2(velocity.x, velocity.z))
 	
 	# Set velocity directly
 	velocity.x = direction.x * chase_speed
@@ -192,15 +191,17 @@ func change_state(new_state: State):
 	# Enter new state
 	match new_state:
 		State.IDLE:
-			print("Enemy: IDLE")
+			#print("Enemy: IDLE")
 			wait_time = randf_range(wander_wait_time_min, wander_wait_time_max)
 		State.WANDER:
-			print("Enemy: WANDER")
+			#print("Enemy: WANDER")
 			set_random_wander_target()
 		State.CHASE:
-			print("Enemy: CHASE")
+			#print("Enemy: CHASE")
+			pass
 		State.ATTACK:
-			print("Enemy: ATTACK")
+			#print("Enemy: ATTACK")
+			pass
 
 func set_random_wander_target():
 	# Pick a random point around spawn position - simple and direct
@@ -215,11 +216,7 @@ func set_random_wander_target():
 	
 	wander_target = spawn_position + offset
 	
-	print("=== NEW WANDER TARGET ===")
-	print("Enemy wandering to: ", wander_target)
-	print("Current position: ", global_position)
-	print("Distance: ", global_position.distance_to(wander_target))
-	print("=========================")
+	
 
 func can_see_player() -> bool:
 	if not player:
@@ -273,7 +270,7 @@ func smooth_look_at(target_pos: Vector3, delta: float):
 	rotation.y = lerp_angle(rotation.y, target_rotation, rotation_speed * delta)
 
 func perform_attack():
-	print("Enemy attacks!")
+	pass
 	
 	# Deal damage if player has take_damage method
 	if player and player.has_method("take_damage"):

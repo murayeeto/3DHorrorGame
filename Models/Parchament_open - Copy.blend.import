@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bnhjrpts5r7ms"
-path="res://.godot/imported/Parchament_open.blend-67957026e5e184f9cf62abe9a2b7ade3.scn"
+uid="uid://b5y3nb3y8fuln"
+path="res://.godot/imported/Parchament_open - Copy.blend-a20c44c1f5ece32b1e6bc79082d42787.scn"
 
 [deps]
 
-source_file="res://Models/Parchament_open.blend"
-dest_files=["res://.godot/imported/Parchament_open.blend-67957026e5e184f9cf62abe9a2b7ade3.scn"]
+source_file="res://Models/Parchament_open - Copy.blend"
+dest_files=["res://.godot/imported/Parchament_open - Copy.blend-a20c44c1f5ece32b1e6bc79082d42787.scn"]
 
 [params]
 
@@ -49,11 +49,11 @@ blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
 blender/meshes/tangents=true
-blender/meshes/skins=true
+blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false
 blender/materials/unpack_enabled=true
 blender/materials/export_materials=1
 blender/animation/limit_playback=true
 blender/animation/always_sample=true
 blender/animation/group_tracks=true
-gltf/naming_version=0
+gltf/naming_version=2

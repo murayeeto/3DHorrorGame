@@ -1,10 +1,11 @@
-[gd_scene load_steps=71 format=4 uid="uid://cuvwgjg2y6mfg"]
+[gd_scene load_steps=72 format=4 uid="uid://cuvwgjg2y6mfg"]
 
 [ext_resource type="PackedScene" uid="uid://1ntb16ffldwh" path="res://Scenes/Player/Player.tscn" id="1_61imk"]
 [ext_resource type="Texture2D" uid="uid://biorq6gj2wltl" path="res://Assets/Horror Textures by Canvas Coven/Tiled metal texture/Tiled_metal_texture_16.png" id="2_61imk"]
 [ext_resource type="PackedScene" uid="uid://dkunkupvkxjw3" path="res://Scenes/Levels/enemy.tscn" id="3_ou0hf"]
 [ext_resource type="Texture2D" uid="uid://d710yp6s1d5e" path="res://Assets/Horror Textures by Canvas Coven/Stone tiled bricks/Stone_tiled_bricks_05.png" id="3_t8p38"]
 [ext_resource type="Texture2D" uid="uid://cpw8g6ru12vhx" path="res://Assets/Models pack psx/Texture/P3.jpg" id="4_ou0hf"]
+[ext_resource type="Script" path="res://Scripts/BookSpawner.gd" id="4_spawner"]
 [ext_resource type="Texture2D" uid="uid://b4e3q6ump7q0f" path="res://Assets/Horror Textures by Canvas Coven/Unique pattern materials/Unique_pattern_material_22.png" id="5_24y5l"]
 [ext_resource type="PackedScene" uid="uid://dd5re7ctke8i1" path="res://Assets/Models pack psx/Models/props.glb" id="5_t8p38"]
 [ext_resource type="Texture2D" uid="uid://cnupmblf5gmq0" path="res://Assets/Horror Textures by Canvas Coven/Stone tiles/Stone_tiles_11.png" id="6_512ek"]
@@ -21,7 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://cfwvaa5hsxdoi" path="res://Assets/Horror Textures by Canvas Coven/Sand/Sand_10.png" id="15_2ppqv"]
 [ext_resource type="Texture2D" uid="uid://c5fbvbmmf2os8" path="res://Assets/Horror Textures by Canvas Coven/Unique pattern materials/Unique_pattern_material_16.png" id="15_xr5mn"]
 [ext_resource type="Texture2D" uid="uid://dqf4gkthqblr0" path="res://Assets/Horror Textures by Canvas Coven/Sand/Sand_03.png" id="16_cmvlt"]
-[ext_resource type="PackedScene" path="res://Scenes/Levels/bookCollect.tscn" id="22_ffbuv"]
+[ext_resource type="PackedScene" uid="uid://7ehxbhg5kx3s" path="res://Scenes/Levels/bookCollect.tscn" id="22_ffbuv"]
 [ext_resource type="PackedScene" uid="uid://lv18cexhmqt2" path="res://Scenes/Menus&Screens/UI.tscn" id="23_2ppqv"]
 
 [sub_resource type="Environment" id="Environment_ou0hf"]
@@ -2438,9 +2439,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 145.433, 26.288, -151.572)
 [node name="Cube_244" parent="props" index="118"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.183, 1.52799, 3.12483)
 
-[node name="BookCollect" parent="." instance=ExtResource("22_ffbuv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.27582, 1.02289, 11.7886)
-collectible_name = "Book"
+[node name="BookSpawner" type="Node" parent="."]
+script = ExtResource("4_spawner")
+book_scene = ExtResource("22_ffbuv")
+number_of_books = 8
+spawn_height = 1.0
+min_x = -25.0
+max_x = 25.0
+min_z = -25.0
+max_z = 25.0
+floor_y = 1.0
 
 [node name="Ui" parent="." instance=ExtResource("23_2ppqv")]
 

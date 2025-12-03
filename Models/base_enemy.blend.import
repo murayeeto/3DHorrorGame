@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://78jjo7vmf65a"
-path="res://.godot/imported/base_enemy.blend-f457100ff089869e77fe357c69fad003.scn"
+path="res://.godot/imported/base_enemy.blend-2bce9389a8eecc6f52bc90a2e357dbd2.scn"
 
 [deps]
 
-source_file="res://base_enemy.blend"
-dest_files=["res://.godot/imported/base_enemy.blend-f457100ff089869e77fe357c69fad003.scn"]
+source_file="res://Models/base_enemy.blend"
+dest_files=["res://.godot/imported/base_enemy.blend-2bce9389a8eecc6f52bc90a2e357dbd2.scn"]
 
 [params]
 

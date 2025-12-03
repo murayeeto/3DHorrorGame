@@ -1,8 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dwfq8tll7h5s7"]
+[gd_scene load_steps=12 format=3 uid="uid://dwfq8tll7h5s7"]
 
 [ext_resource type="PackedScene" uid="uid://1ntb16ffldwh" path="res://Scenes/Player/Player.tscn" id="1_if7jy"]
+[ext_resource type="PackedScene" uid="uid://lv18cexhmqt2" path="res://Scenes/Menus&Screens/UI.tscn" id="2_ui"]
 [ext_resource type="PackedScene" uid="uid://dkunkupvkxjw3" path="res://Scenes/Levels/enemy.tscn" id="3_f3gh5"]
 [ext_resource type="Script" uid="uid://d37td0unc8bx" path="res://Scripts/CollectableManager.gd" id="3_mx3p3"]
+[ext_resource type="Script" path="res://Scripts/BookSpawner.gd" id="4_spawner"]
+[ext_resource type="Script" path="res://Scripts/DebugHelper.gd" id="5_debug"]
 [ext_resource type="PackedScene" path="res://Scenes/Levels/bookCollect.tscn" id="5_wm76k"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f1n8c"]
@@ -22,6 +25,8 @@ glow_enabled = true
 [sub_resource type="NavigationMesh" id="NavigationMesh_mx3p3"]
 
 [node name="Level" type="Node3D"]
+
+[node name="UI" parent="." instance=ExtResource("2_ui")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_yjxcc")
@@ -296,15 +301,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.04927, 0.351708, 7.52996)
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_mx3p3")
 
-[node name="CollectableManager" type="Node" parent="."]
+[node name="CollectableManager" type="Node" parent="." groups=["collectible_manager"]]
 script = ExtResource("3_mx3p3")
 
-[node name="BookCollect2" parent="." instance=ExtResource("5_wm76k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.03966, 1.14649, 5.33031)
-collectible_id = 2
-collectible_name = "Book2"
+[node name="BookSpawner" type="Node" parent="."]
+script = ExtResource("4_spawner")
+book_scene = ExtResource("5_wm76k")
+number_of_books = 8
+spawn_height = 1.0
+min_x = -15.0
+max_x = 15.0
+min_z = -10.0
+max_z = 15.0
+floor_y = 0.5
 
-[node name="BookCollect3" parent="." instance=ExtResource("5_wm76k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0138874, 0.843955, 10.1942)
-collectible_id = 3
-collectible_name = "Book3"
+[node name="DebugHelper" type="Node" parent="."]
+script = ExtResource("5_debug")

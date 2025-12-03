@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dhiil61sc5guv" path="res://Scripts/Collectable.gd" id="1_70sqh"]
 [ext_resource type="AudioStream" uid="uid://5l7j23wq1q2u" path="res://Scenes/SFX/undertakers-bell_2UwFCIe.mp3" id="2_e5uc6"]
-[ext_resource type="PackedScene" uid="uid://bnhjrpts5r7ms" path="res://Models/Parchament_open.blend" id="3_e5uc6"]
+[ext_resource type="PackedScene" path="res://Models/Parchament_open - Copy.blend" id="3_e5uc6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ynjqq"]
 size = Vector3(0.795, 1, 0.215)

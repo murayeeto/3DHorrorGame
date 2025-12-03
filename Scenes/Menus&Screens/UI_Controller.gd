@@ -54,13 +54,26 @@ func update_hearts(current_health: int):
 
 # Update the item counter display
 func update_item_counter():
+	print("UI_Controller.update_item_counter() called with ", current_items, "/", max_items)
 	if item_counter_label:
 		item_counter_label.text = "%d/%d" % [current_items, max_items]
+		print("UI_Controller: Label updated to: ", item_counter_label.text)
+	else:
+		print("ERROR: item_counter_label is null!")
 
 # Call this from player.gd when an item is picked up
 func add_item():
+	print("UI_Controller.add_item() called! Current: ", current_items, " Max: ", max_items)
 	current_items = min(current_items + 1, max_items)
+	print("UI_Controller: New count: ", current_items)
 	update_item_counter()
+	
+	# Check if all items collected
+	if current_items >= max_items:
+		print("ALL ITEMS COLLECTED! Loading win screen...")
+		# Small delay so player sees 8/8
+		await get_tree().create_timer(1.0).timeout
+		get_tree().change_scene_to_file("res://Scenes/Menus&Screens/WinScreen.tscn")
 
 # Called when player's health changes
 func _on_player_health_changed(new_health: int):

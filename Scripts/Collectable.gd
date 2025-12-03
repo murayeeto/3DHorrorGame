@@ -42,7 +42,7 @@ func _ready():
 	
 	# Setup collision layers
 	collision_layer = 4  # Layer 3 (bit 2)
-	collision_mask = 0   # Doesn't detect anything, only gets detected
+	collision_mask = 1   # Detect layer 1 (player)
 	
 	print("Collectible ", collectible_id, " (", collectible_name, ") ready at: ", global_position)
 
@@ -95,7 +95,16 @@ func collect():
 	# Emit signal to manager
 	collected.emit(collectible_id)
 	
-	# Notify CollectibleManager
+	# Update UI directly
+	await get_tree().process_frame
+	var ui = get_tree().get_first_node_in_group("ui")
+	if ui and ui.has_method("add_item"):
+		print("DEBUG: Found UI, calling add_item()")
+		ui.add_item()
+	else:
+		print("ERROR: Could not find UI or add_item method!")
+	
+	# Also try to notify CollectibleManager if it exists
 	var manager = get_tree().get_first_node_in_group("collectible_manager")
 	if manager and manager.has_method("on_collectible_picked_up"):
 		manager.on_collectible_picked_up(collectible_id, collectible_name)

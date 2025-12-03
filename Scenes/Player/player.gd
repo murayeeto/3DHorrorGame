@@ -29,6 +29,10 @@ const INTERACTION_RANGE = 3.0
 const MAX_HEALTH = 3
 const INVULNERABILITY_TIME = 2.0
 
+# Debug settings
+var show_book_debug: bool = false
+var debug_spheres: Array = []
+
 # State variables
 var current_speed = WALK_SPEED
 var is_crouching = false
@@ -106,6 +110,10 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _input(event):
+	# Debug - show books through walls
+	if event.is_action_pressed("DebugStuff"):
+		toggle_book_debug()
+	
 	# Handle item pickup/interaction
 	if event.is_action_pressed("Interact"):
 		attempt_pickup()
@@ -238,8 +246,52 @@ func camera_damage_effect():
 			camera.position = original_pos + Vector3(randf_range(-0.1, 0.1), randf_range(-0.1, 0.1), 0)
 			await get_tree().create_timer(0.05).timeout
 		camera.position = original_pos
+
+# DEBUG FUNCTIONS
+func toggle_book_debug():
+	show_book_debug = !show_book_debug
+	print("========================================")
+	if show_book_debug:
+		print("DEBUG: SHOWING BOOKS - ON")
+		create_book_markers()
+	else:
+		print("DEBUG: HIDING BOOKS - OFF")
+		clear_book_markers()
+	print("========================================")
+
+func create_book_markers():
+	clear_book_markers()
+	var collectibles = get_tree().get_nodes_in_group("collectibles")
+	print("Found ", collectibles.size(), " books")
+	
+	for collectible in collectibles:
+		var mesh_instance = MeshInstance3D.new()
+		var sphere_mesh = SphereMesh.new()
+		sphere_mesh.radius = 2.0
+		sphere_mesh.height = 4.0
+		mesh_instance.mesh = sphere_mesh
 		
-		print("[DAMAGE] Invulnerable for ", INVULNERABILITY_TIME, " seconds")
+		var material = StandardMaterial3D.new()
+		material.albedo_color = Color(1.0, 0.0, 1.0, 0.9)
+		material.emission_enabled = true
+		material.emission = Color(1.0, 0.0, 1.0)
+		material.emission_energy_multiplier = 5.0
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		material.no_depth_test = true
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		
+		mesh_instance.material_override = material
+		get_tree().root.add_child(mesh_instance)
+		mesh_instance.global_position = collectible.global_position
+		debug_spheres.append(mesh_instance)
+		print("Created marker at ", collectible.global_position)
+
+func clear_book_markers():
+	for sphere in debug_spheres:
+		if is_instance_valid(sphere):
+			sphere.queue_free()
+	debug_spheres.clear()
 
 func die():
 	print("========== PLAYER DIED ==========")

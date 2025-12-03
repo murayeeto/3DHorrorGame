@@ -13,13 +13,25 @@ signal all_collectibles_found()
 # State variables
 var collected_ids: Array[int] = []
 var collected_count: int = 0
+var ui_controller = null
 
 # UI reference
 var ui_label: Label = null
 
 func _ready():
+	print("CollectableManager._ready() called!")
+	
 	# Add to group for easy access
 	add_to_group("collectible_manager")
+	print("CollectableManager: Added self to 'collectible_manager' group")
+	
+	# Verify we're in the group
+	await get_tree().process_frame
+	var in_group = is_in_group("collectible_manager")
+	print("CollectableManager: Am I in the group? ", in_group)
+	
+	# Find the UI controller
+	call_deferred("find_ui_controller")
 	
 	# Find all collectibles in the scene
 	call_deferred("setup_collectibles")
@@ -29,6 +41,14 @@ func _ready():
 		setup_ui()
 	
 	print("CollectibleManager: Initialized. Looking for ", total_collectibles, " collectibles.")
+
+func find_ui_controller():
+	await get_tree().process_frame
+	ui_controller = get_tree().get_first_node_in_group("ui")
+	if ui_controller:
+		print("CollectibleManager: Found UI controller: ", ui_controller.name)
+	else:
+		print("CollectibleManager: WARNING - Could not find UI controller!")
 
 func setup_collectibles():
 	# Wait for scene to be ready
@@ -52,6 +72,15 @@ func on_collectible_picked_up(id: int, collectible_name: String = "Item"):
 	collected_count += 1
 	
 	print("Collectible Manager: Picked up '", collectible_name, "' (", collected_count, "/", total_collectibles, ")")
+	
+	# Update the UI item counter
+	if ui_controller and ui_controller.has_method("add_item"):
+		print("DEBUG: Calling UI add_item()")
+		ui_controller.add_item()
+		print("DEBUG: UI counter updated successfully")
+	else:
+		print("ERROR: UI controller not available or missing add_item method!")
+		print("  ui_controller = ", ui_controller)
 	
 	# Update UI
 	update_ui()
