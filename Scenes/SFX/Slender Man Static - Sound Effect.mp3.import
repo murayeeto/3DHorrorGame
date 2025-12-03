@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dm0xv1p1s8t4"
+path="res://.godot/imported/Slender Man Static - Sound Effect.mp3-2951c1f864e9000459632838effabcaf.mp3str"
+
+[deps]
+
+source_file="res://Scenes/SFX/Slender Man Static - Sound Effect.mp3"
+dest_files=["res://.godot/imported/Slender Man Static - Sound Effect.mp3-2951c1f864e9000459632838effabcaf.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

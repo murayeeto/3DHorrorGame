@@ -2,21 +2,15 @@ extends Node
 
 @export var book_scene: PackedScene  # Assign bookCollect.tscn in the editor
 @export var number_of_books: int = 8
-@export var spawn_height: float = 1.0  # Height above floor to spawn books
-
-# Define spawn area bounds (adjust these based on your map)
-@export var min_x: float = -500.0
-@export var max_x: float = 500.0
-@export var min_z: float = -500.0
-@export var max_z: float = 500.0
-@export var floor_y: float = 0.0  # The Y position of your floor
-
-# Spawn validation settings
-@export var max_spawn_attempts: int = 1000  # Max attempts to find valid position per book
-@export var raycast_height: float = 10.0  # How high above to start raycast
-@export var min_clearance: float = 1.5  # Minimum height clearance above spawn point
+@export var spawn_height: float = 2.5  # Height above floor to spawn books
 @export var min_distance_between_books: float = 10.0  # Minimum distance between spawned books
-@export var corner_buffer: float = 10.0  # Don't spawn within this distance of corners (min/max bounds)
+@export var max_spawn_attempts: int = 1000  # Max attempts per book
+
+# List of floor node names to spawn on
+var floor_names: Array[String] = [
+	"H1Floor", "H2Floor", "H3Floor",  # Hallway floors
+	"Floor"  # Room floors (will match all Floor nodes)
+]
 
 func _ready():
 	# Wait for scene to be fully loaded
@@ -24,30 +18,35 @@ func _ready():
 	spawn_books()
 
 var spawned_positions: Array[Vector3] = []
+var available_floors: Array[Node] = []
 
 func spawn_books():
 	if not book_scene:
 		print("ERROR: Book scene not assigned to BookSpawner!")
 		return
 	
-	print("Spawning ", number_of_books, " books...")
+	# Find all floor nodes in the scene
+	find_floor_nodes()
+	
+	if available_floors.is_empty():
+		print("ERROR: No floor nodes found! Looking for: ", floor_names)
+		return
+	
+	print("Found ", available_floors.size(), " floor nodes")
 	
 	var spawned_count = 0
 	
 	for i in range(number_of_books):
-		print("\n=== Spawning book ", i + 1, "/", number_of_books, " ===")
 		var spawned = false
 		
 		for attempt in range(max_spawn_attempts):
-			# Generate random position
-			var random_x = randf_range(min_x + corner_buffer, max_x - corner_buffer)
-			var random_z = randf_range(min_z + corner_buffer, max_z - corner_buffer)
-			var test_position = Vector3(random_x, raycast_height, random_z)
+			# Pick a random floor
+			var random_floor = available_floors[randi() % available_floors.size()]
 			
-			# Raycast down to find floor
-			var floor_position = find_floor_position(test_position)
+			# Get a random position on that floor
+			var spawn_position = get_random_position_on_floor(random_floor)
 			
-			if floor_position != Vector3.ZERO and is_far_enough_from_other_books(floor_position):
+			if spawn_position != Vector3.ZERO and is_far_enough_from_other_books(spawn_position):
 				# Instance the book
 				var book = book_scene.instantiate()
 				
@@ -58,32 +57,85 @@ func spawn_books():
 				# Add to scene
 				get_parent().add_child(book)
 				
-				# Set position and scale after adding to scene
-				book.global_position = floor_position
+				# Position the book
+				book.global_position = spawn_position
+				
+				# Scale down the book
 				book.scale = Vector3(0.05, 0.05, 0.05)
 				
 				# Disable bobbing animation
 				if book.has_method("set_physics_process"):
 					book.set_physics_process(false)
 				
-				# Store this position
-				spawned_positions.append(floor_position)
+				# Store position and mark spawned
+				spawned_positions.append(spawn_position)
 				spawned = true
 				spawned_count += 1
-				print("  SUCCESS! Book ", i + 1, " spawned at ", floor_position)
 				break
 		
 		if not spawned:
-			print("  FAILED to spawn book ", i + 1, " after ", max_spawn_attempts, " attempts")
+			print("WARNING: Failed to spawn book ", i + 1)
 	
-	print("\n=== SPAWN SUMMARY ===")
-	print("Successfully spawned ", spawned_count, " out of ", number_of_books, " books")
-	if spawned_count < number_of_books:
-		print("WARNING: Some books failed to spawn!")
-	for i in range(spawned_positions.size()):
-		print("  Book ", i + 1, ": ", spawned_positions[i])
+	print("Successfully spawned ", spawned_count, "/", number_of_books, " books")
 
+func find_floor_nodes():
+	# Search the entire scene tree for floor nodes
+	var root = get_tree().root
+	for floor_name in floor_names:
+		var floors = find_nodes_by_name(root, floor_name)
+		available_floors.append_array(floors)
 
+func find_nodes_by_name(node: Node, search_name: String) -> Array[Node]:
+	var result: Array[Node] = []
+	if node.name == search_name:
+		result.append(node)
+	for child in node.get_children():
+		result.append_array(find_nodes_by_name(child, search_name))
+	return result
+
+func get_random_position_on_floor(floor_node: Node) -> Vector3:
+	# Check if it's a CSGBox3D
+	var csg_box: CSGBox3D = floor_node as CSGBox3D
+	if csg_box:
+		# Get the size of the CSG box
+		var box_size = csg_box.size
+		var global_transform = csg_box.global_transform
+		
+		# Generate random position within the box's bounds
+		var local_pos = Vector3(
+			randf_range(-box_size.x / 2.0, box_size.x / 2.0),
+			0,
+			randf_range(-box_size.z / 2.0, box_size.z / 2.0)
+		)
+		
+		# Transform to global position and set spawn height
+		var global_pos = global_transform * local_pos
+		global_pos.y = spawn_height
+		
+		return global_pos
+	
+	# Check if it's a MeshInstance3D
+	var mesh_instance: MeshInstance3D = floor_node as MeshInstance3D
+	if mesh_instance:
+		# Get AABB (bounding box) of the mesh
+		var aabb = mesh_instance.get_aabb()
+		var global_transform = mesh_instance.global_transform
+		
+		# Generate random position within the floor's bounds
+		var local_pos = Vector3(
+			randf_range(aabb.position.x, aabb.position.x + aabb.size.x),
+			aabb.position.y,
+			randf_range(aabb.position.z, aabb.position.z + aabb.size.z)
+		)
+		
+		# Transform to global position and set spawn height
+		var global_pos = global_transform * local_pos
+		global_pos.y = spawn_height
+		
+		return global_pos
+	
+	print("  ERROR: Floor node is neither CSGBox3D nor MeshInstance3D: ", floor_node.name)
+	return Vector3.ZERO
 
 func is_far_enough_from_other_books(position: Vector3) -> bool:
 	for spawned_pos in spawned_positions:
@@ -91,29 +143,3 @@ func is_far_enough_from_other_books(position: Vector3) -> bool:
 		if distance < min_distance_between_books:
 			return false
 	return true
-
-func find_floor_position(position: Vector3) -> Vector3:
-	var space_state = get_tree().root.get_world_3d().direct_space_state
-	
-	# First raycast DOWN to find floor
-	var ray_down = PhysicsRayQueryParameters3D.create(position, position + Vector3(0, -50.0, 0))
-	var result_down = space_state.intersect_ray(ray_down)
-	
-	if not result_down:
-		return Vector3.ZERO  # No floor found
-	
-	# Second raycast UP from floor to check if there's a ceiling (we're inside)
-	var check_position = Vector3(result_down.position.x, 2.5, result_down.position.z)
-	var ray_up = PhysicsRayQueryParameters3D.create(check_position, check_position + Vector3(0, 1000.0, 0))
-	var result_up = space_state.intersect_ray(ray_up)
-	
-	if not result_up:
-		return Vector3.ZERO  # No ceiling found - probably outside
-	
-	# Check if ceiling is at least 2 units high (less strict)
-	var ceiling_height = result_up.position.y - 2.5
-	if ceiling_height < 2.0:
-		return Vector3.ZERO  # Ceiling too low
-	
-	# Always spawn at Y = 2.5, use detected X and Z position
-	return Vector3(result_down.position.x, 2.5, result_down.position.z)

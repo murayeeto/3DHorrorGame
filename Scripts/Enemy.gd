@@ -24,6 +24,10 @@ enum State {
 @export var wander_wait_time_min: float = 2.0
 @export var wander_wait_time_max: float = 5.0
 
+# Footstep settings
+var footstep_timer: float = 0.0
+const FOOTSTEP_INTERVAL: float = 0.6  # Heavy footsteps are slower
+
 # State variables
 var current_state: State = State.IDLE
 var player: CharacterBody3D = null
@@ -35,8 +39,12 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 # Child nodes
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
+@onready var footstep_player: AudioStreamPlayer3D = null
 
 func _ready():
+	# Add to enemy group for detection
+	add_to_group("enemy")
+	
 	# Store spawn position
 	spawn_position = global_position
 	
@@ -51,6 +59,18 @@ func _ready():
 	
 	# Find player
 	call_deferred("_setup")
+	
+	# Setup footstep audio player
+	if not footstep_player:
+		footstep_player = AudioStreamPlayer3D.new()
+		add_child(footstep_player)
+		footstep_player.name = "FootstepPlayer"
+		footstep_player.max_distance = 30.0
+		footstep_player.volume_db = 0.0
+		# Load heavy footstep sound
+		var footstep_sound = load("res://Scenes/SFX/heavy-walking-footsteps-352771.mp3")
+		if footstep_sound:
+			footstep_player.stream = footstep_sound
 
 func _setup():
 	# Wait for navigation map to be ready - CRITICAL!
@@ -125,6 +145,9 @@ func process_wander(delta: float):
 	velocity.x = direction.x * wander_speed
 	velocity.z = direction.z * wander_speed
 	
+	# Play footsteps while moving
+	play_footsteps(delta)
+	
 	# Rotate to face movement direction
 	smooth_look_at(wander_target, delta)
 
@@ -147,6 +170,9 @@ func process_chase(delta: float):
 	
 	# Move DIRECTLY towards player - ignore navigation for now
 	var direction = (player.global_position - global_position).normalized()
+	
+	# Play footsteps while chasing
+	play_footsteps(delta)
 	
 	
 	# Set velocity directly
@@ -278,3 +304,20 @@ func perform_attack():
 	
 	# Add visual/audio feedback here
 	# Example: play attack animation, sound effect, etc.
+
+func play_footsteps(delta: float):
+	if not footstep_player:
+		return
+	
+	# Update timer
+	footstep_timer += delta
+	
+	# Play footstep sound at intervals
+	if footstep_timer >= FOOTSTEP_INTERVAL:
+		footstep_timer = 0.0
+		footstep_player.play()
+		# Stop after 1.5 seconds
+		get_tree().create_timer(1.5).timeout.connect(func(): 
+			if footstep_player:
+				footstep_player.stop()
+		)

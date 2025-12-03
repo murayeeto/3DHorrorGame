@@ -1,0 +1,15 @@
+[remap]
+
+importer="import_gif_to_sprite_frames"
+type="SpriteFrames"
+uid="uid://dj4heayp3mdr"
+path="res://.godot/imported/static-tv-static.gif-44152421c6ed9a5587d0abbf7b6cc8f7.tres"
+
+[deps]
+
+source_file="res://Scenes/Resources/static-tv-static.gif"
+dest_files=["res://.godot/imported/static-tv-static.gif-44152421c6ed9a5587d0abbf7b6cc8f7.tres"]
+
+[params]
+
+frames_per_second=30
